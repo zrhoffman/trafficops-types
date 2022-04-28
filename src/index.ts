@@ -1,3 +1,5 @@
+import type { Alert } from "./alert";
+
 export * from "./about";
 export * from "./acme";
 export * from "./alert";
@@ -31,8 +33,6 @@ export * from "./type";
 export * from "./uri.signing";
 export * from "./user";
 export * from "./vault";
-
-import type { Alert } from "./alert";
 
 /**
  * Represents a version of the Traffic Ops API for which this library was made.
