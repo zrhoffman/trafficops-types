@@ -10,7 +10,7 @@ export interface Log {
 	 * [the Traffic Ops API documentation](https://traffic-control-cdn.readthedocs.io/en/latest/api/index.html#traffic-ops-s-custom-date-time-format)
 	 * for details.
 	 */
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 	/**
 	 * @deprecated This field has no further use, and is subject to removal in
 	 * the future.

@@ -10,7 +10,7 @@ export interface ResponseASN {
 	 * [the Traffic Ops API documentation](https://traffic-control-cdn.readthedocs.io/en/latest/api/index.html#traffic-ops-s-custom-date-time-format)
 	 * for details.
 	 */
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 }
 
 /** Represents an ASN in an API request. */
@@ -87,7 +87,7 @@ interface ResponseCacheGroupBase {
 	fallbacks: Array<string>;
 	fallbackToClosest: boolean;
 	readonly id: number;
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 	latitude: number | null;
 	localizationMethods: Array<LocalizationMethod>;
 	longitude: number | null;
@@ -155,3 +155,55 @@ ResponseCacheGroupWithoutParentOrSecondary;
  * Refer to https://traffic-control-cdn.readthedocs.io/en/latest/overview/cache_groups.html
  */
 export type CacheGroup = RequestCacheGroup | ResponseCacheGroup;
+
+/**
+ * ResponseCacheGroupParameters represents a response from Traffic Ops to a
+ * request made to its /cachegroupparameters` API endpoint.
+ *
+ * @deprecated In the latest API version, there is no notion of associating a
+ * Parameter with a Cache Group.
+ */
+export interface ResponseCacheGroupParameters {
+	cachegroupParameters: Array<{
+		parameter: number;
+		readonly lastUpdated: Date;
+		/** The Name of the Cache Group associated with this Parameter. */
+		cachegroup: string;
+	}>;
+}
+
+/**
+ * RequestCacheGroupParameter represents an association between a Cache Group
+ * and a Parameter as Traffic Ops requires it in requests to its API. Note that
+ * the `/cachegroupparameters` endpoint allows the request body to either be
+ * one of these structures, or an array thereof.
+ *
+ * This is also the type of a response from Traffic Ops to the request that
+ * passed this structure for the purposes of creating an association between a
+ * Parameter and a Cache Group.
+ *
+ * @deprecated In the latest API version, there is no notion of associating a
+ * Parameter with a Cache Group.
+ */
+export interface RequestCacheGroupParameter {
+	cacheGroupId: number;
+	parameterId: number;
+}
+
+/**
+ * Represents a request to assign servers within a Cache Group to a specified
+ * set of Delivery Services.
+ */
+export interface CacheGroupDeliveryServiceAssignmentRequest {
+	deliveryServices: Array<number>;
+}
+
+/**
+ * Represents a response from the Traffic Ops API to a request to associate the
+ * servers of a Cache Group with a set of Delivery Services.
+ */
+export interface CacheGroupDeliveryServiceAssignmentResponse {
+	deliveryServices: Array<number>;
+	readonly id: number;
+	serverNames: Array<string>;
+}

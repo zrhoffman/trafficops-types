@@ -1,6 +1,6 @@
 export interface Log {
     readonly id: number;
-    lastUpdated: Date;
+    readonly lastUpdated: Date;
     level: "APICHANGE";
     message: string;
     readonly ticketNum: number | null;

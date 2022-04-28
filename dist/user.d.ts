@@ -51,7 +51,7 @@ interface ResponseUser {
     fullName: string;
     gid: number | null;
     id: number;
-    lastUpdated: Date;
+    readonly lastUpdated: Date;
     newUser: boolean | null;
     phoneNumber: string | null;
     postalCode: string | null;
@@ -86,7 +86,7 @@ export interface ResponseCurrentUser {
     fullName: string;
     gid: number | null;
     id: number;
-    lastUpdated: Date;
+    readonly lastUpdated: Date;
     localUser: boolean;
     newUser: boolean;
     phoneNumber: string | null;
@@ -101,6 +101,7 @@ export interface ResponseCurrentUser {
     uid: number | null;
     username: string;
 }
+export declare function userEmailIsValid(email: string): email is `${string}@${string}.${string}`;
 export interface RequestCurrentUser {
     addressLine1?: string | null;
     addressLine2?: string | null;
@@ -123,4 +124,40 @@ export interface RequestCurrentUser {
     username?: never;
 }
 export declare type CurrentUser = ResponseCurrentUser | RequestCurrentUser;
+export interface RequestRole {
+    capabilities: Array<string>;
+    description: string;
+    name: string;
+    privLevel: number;
+}
+export interface ResponseRole extends RequestRole {
+    readonly id: number;
+}
+export declare type Role = RequestRole | ResponseRole;
+export interface RequestTenant {
+    active: boolean;
+    name: string;
+    parentId: number;
+}
+export interface RequestTenantResponse extends RequestTenant {
+    readonly id: number;
+    readonly lastUpdated: Date;
+}
+interface ResponseTenantBase {
+    active: boolean;
+    readonly id: number;
+    readonly lastUpdated: Date;
+    name: string;
+}
+interface ResponseRootTenant extends ResponseTenantBase {
+    active: true;
+    name: "root";
+    parentId: null;
+}
+interface ResponseRegularTenant extends ResponseTenantBase {
+    name: Exclude<string, "root">;
+    parentId: number;
+}
+export declare type ResponseTenant = ResponseRootTenant | ResponseRegularTenant;
+export declare type Tenant = ResponseTenant | RequestTenant | RequestTenantResponse;
 export {};

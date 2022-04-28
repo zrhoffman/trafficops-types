@@ -4,3 +4,7 @@ export interface ACMEAccount {
     provider: string;
     uri: string;
 }
+export interface ACMEDNSRecord {
+    fqdn: string;
+    record: string;
+}

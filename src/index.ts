@@ -2,21 +2,33 @@ export * from "./about";
 export * from "./acme";
 export * from "./alert";
 export * from "./cache.group";
+export * from "./capability";
 export * from "./cdn";
+export * from "./coordinate";
+export * from "./delivery.service.request";
 export * from "./delivery.service";
 export * from "./division";
+export * from "./dnssec";
+export * from "./federation";
 export * from "./invalidation";
 export * from "./iso";
 export * from "./login";
 export * from "./logs";
-export * from "./parameter";
+export * from "./origin";
 export * from "./physical.location";
 export * from "./plugin";
 export * from "./profile";
+export * from "./router";
+export * from "./server.capability";
 export * from "./server";
+export * from "./snap.and.queue";
+export * from "./ssl";
 export * from "./stats";
 export * from "./status";
+export * from "./steering";
+export * from "./topology";
 export * from "./type";
+export * from "./uri.signing";
 export * from "./user";
 export * from "./vault";
 
@@ -58,10 +70,17 @@ export const VERSION: VersionType = {
 /**
  * (Nearly) All responses from the Traffic Ops API conform to this interface.
  */
-export interface APIResponse<T> {
+export interface APISuccessResponse<T> {
+	/** Any and all Alerts that may accompany the response. */
 	alerts?: Array<Alert>;
+	/** The actual response object. */
 	response: T;
+	/** An object containing summary statistics. */
 	summary?: {
+		/**
+		 * The total number of results that *would have* been returned if not
+		 * for pagination controls used in the request's query string.
+		 */
 		count: number;
 	};
 }

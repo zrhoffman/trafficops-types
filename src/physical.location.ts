@@ -19,7 +19,7 @@ export interface ResponsePhysicalLocation {
 	 * [the Traffic Ops API documentation](https://traffic-control-cdn.readthedocs.io/en/latest/api/index.html#traffic-ops-s-custom-date-time-format)
 	 * for details.
 	 */
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 	/** The name of the Physical Location. */
 	name: string;
 	/** A phone number where the the Physical Location’s poc might be reached. */

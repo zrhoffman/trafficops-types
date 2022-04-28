@@ -1,7 +1,7 @@
 export interface ResponseStatus {
     description: string | null;
     id: number;
-    lastUpdated: Date;
+    readonly lastUpdated: Date;
     name: string;
 }
 export interface RequestStatus {
@@ -9,3 +9,7 @@ export interface RequestStatus {
     name: string;
 }
 export declare type Status = ResponseStatus | RequestStatus;
+export interface StatusChangeRequest {
+    offlineReason?: string | null;
+    status: string;
+}

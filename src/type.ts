@@ -6,14 +6,14 @@
  */
 export interface TypeFromResponse {
 	description: string;
-	id: number;
+	readonly id: number;
 	/**
 	 * This is actually a string that represents a date/time, in a custom
 	 * format. Refer to
 	 * [the Traffic Ops API documentation](https://traffic-control-cdn.readthedocs.io/en/latest/api/index.html#traffic-ops-s-custom-date-time-format)
 	 * for details.
 	 */
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 	name: string;
 	useInTable: string;
 }
@@ -22,6 +22,9 @@ export interface TypeFromResponse {
 export interface RequestType {
 	description: string;
 	name: string;
+	/**
+	 * In practice this is limited to "server" and "cachegroup".
+	 */
 	useInTable: string;
 }
 

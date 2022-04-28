@@ -155,7 +155,7 @@ interface ResponseDeliveryServiceBase {
     innerHeaderRewrite: string | null;
     ipv6RoutingEnabled: boolean;
     lastHeaderRewrite: string | null;
-    lastUpdated: Date;
+    readonly lastUpdated: Date;
     logsEnabled: boolean;
     longDesc: string | null;
     longDesc1?: string;
@@ -204,19 +204,98 @@ interface ResponseDeliveryServiceWithoutProfile extends ResponseDeliveryServiceB
 export declare type ResponseDeliveryService = ResponseDeliveryServiceWithProfile | ResponseDeliveryServiceWithoutProfile;
 export declare type DeliveryService = RequestDeliveryService | ResponseDeliveryService;
 export declare function bypassable(ds: DeliveryService): boolean;
-export interface DSCapacity {
-    availablePercent: number;
-    maintenancePercent: number;
-    unavailablePercent: number;
-    utilizedPercent: number;
+export interface RequestDeliveryServiceRegexp {
+    pattern: string;
+    setNumber: number;
+    type: number;
 }
-export interface DSHealth {
-    cachegroups: Array<{
-        name: string;
-        offline: number;
-        online: number;
+export interface ResponseDeliveryServiceRegexp {
+    readonly id: number;
+    pattern: string;
+    setNumber: number;
+    type: number;
+    typeName: string;
+}
+export declare type DeliveryServiceRegexp = RequestDeliveryServiceRegexp | ResponseDeliveryServiceRegexp;
+export interface DeliveryServicesRegexps {
+    dsName: string;
+    regexes: Array<{
+        pattern: string;
+        setNumber: number;
+        type: string;
     }>;
-    totalOnline: number;
-    totalOffline: number;
 }
+export interface DSSafeUpdateRequest {
+    displayName: string;
+    infoUrl?: string | null;
+    longDesc?: string | null;
+    longDesc1?: string | null;
+}
+export interface RequestDeliveryServicesServers {
+    serverNames: Array<string>;
+}
+export interface ResponseDeliveryServicesServers {
+    serverNames: Array<string>;
+    xmlId: string;
+}
+export interface RequestDeliveryServiceServer {
+    dsId: number;
+    replace?: boolean | null;
+    servers?: Array<number> | null;
+}
+export interface ResponseDeliveryServiceServer {
+    deliveryService: number;
+    readonly lastUpdated: Date;
+    server: number;
+}
+export interface RequestServiceCategory {
+    name: string;
+}
+export interface ResponseServiceCategory {
+    readonly lastUpdated: Date;
+    name: string;
+}
+export declare type ServiceCategory = RequestServiceCategory | ResponseServiceCategory;
+export interface RequestStaticDNSEntry {
+    address: string;
+    cachegroupId?: number | null;
+    deliveryserviceId: number;
+    host: string;
+    ttl: number;
+    typeId: number;
+}
+export interface RequestStaticDNSEntryResponse {
+    address: string;
+    cachegroupId: number | null;
+    cachegroup: string | null;
+    deliveryserviceId: number;
+    deliveryservice: string | null;
+    host: string;
+    readonly id: number;
+    readonly lastUpdated: Date;
+    ttl: number;
+    type: string;
+    typeId: number;
+}
+interface ResponseStaticDNSEntryBase {
+    address: string;
+    deliveryserviceId: number;
+    deliveryservice: string;
+    host: string;
+    readonly id: number;
+    readonly lastUpdated: Date;
+    ttl: number;
+    type: string;
+    typeId: number;
+}
+interface ResponseStaticDNSEntryWithCacheGroup extends ResponseStaticDNSEntryBase {
+    cachegroupId: number;
+    cachegroup: string;
+}
+interface ResponseStaticDNSEntryWithoutCacheGroup extends ResponseStaticDNSEntryBase {
+    cachegroupId: null;
+    cachegroup: null;
+}
+export declare type ResponseStaticDNSEntry = ResponseStaticDNSEntryWithCacheGroup | ResponseStaticDNSEntryWithoutCacheGroup;
+export declare type StaticDNSEntry = RequestStaticDNSEntry | RequestStaticDNSEntryResponse | ResponseStaticDNSEntry;
 export {};

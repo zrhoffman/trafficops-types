@@ -8,7 +8,7 @@ export interface ResponseStatus {
 	 * [the Traffic Ops API documentation](https://traffic-control-cdn.readthedocs.io/en/latest/api/index.html#traffic-ops-s-custom-date-time-format)
 	 * for details.
 	 */
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 	name: string;
 }
 
@@ -23,3 +23,14 @@ export interface RequestStatus {
  * response.
  */
 export type Status = ResponseStatus | RequestStatus;
+
+/** Represents a request to change a server's Status. */
+export interface StatusChangeRequest {
+	/**
+	 * This is required to be a non-empty string if and only if `status` is
+	 * `ADMIN_DOWN` or `OFFLINE`.
+	 * @default ""
+	 */
+	offlineReason?: string | null;
+	status: string;
+}

@@ -554,7 +554,7 @@ interface ResponseDeliveryServiceBase {
 	ipv6RoutingEnabled: boolean;
 	lastHeaderRewrite: string | null;
 	/** When the Delivery Service was last updated via the API. */
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 	/** Whether or not logging should be enabled for the Delivery Service. */
 	logsEnabled: boolean;
 	/** A textual description of arbitrary length. */
@@ -731,26 +731,221 @@ export function bypassable(ds: DeliveryService): boolean {
 }
 
 /**
- * DSCapacity represents a response from the API to a request for the capacity
- * of a Delivery Service.
+ * Represents a Delivery Service "Regular Expression" as Traffic Ops requires it
+ * in requests.
  */
-export interface DSCapacity {
-	availablePercent: number;
-	maintenancePercent: number;
-	unavailablePercent: number;
-	utilizedPercent: number;
+export interface RequestDeliveryServiceRegexp {
+	pattern: string;
+	setNumber: number;
+	type: number;
 }
 
 /**
- * DSHealth represents a response from the API to a request for the health of a
- * Delivery Service.
+ * Represents a Delivery Service "Regular Expression" as Traffic Ops presents it
+ * in responses.
  */
-export interface DSHealth {
-	cachegroups: Array<{
-		name: string;
-		offline: number;
-		online: number;
-	}>;
-	totalOnline: number;
-	totalOffline: number;
+export interface ResponseDeliveryServiceRegexp {
+	readonly id: number;
+	pattern: string;
+	setNumber: number;
+	type: number;
+	typeName: string;
 }
+
+/** Represents a Delivery Service "Regular Expression" in an arbitrary context. */
+export type DeliveryServiceRegexp = RequestDeliveryServiceRegexp | ResponseDeliveryServiceRegexp;
+
+/**
+ * Represents the Delivery Service "Regular Expressions" of a Delivery Service
+ * as they appear in responses from the Traffic Ops API's
+ * `/deliveryservices_regexes` endpoint.
+ */
+export interface DeliveryServicesRegexps {
+	/** The Delivery Service's XMLID. */
+	dsName: string;
+	regexes: Array<{
+		pattern: string;
+		setNumber: number;
+		type: string;
+	}>;
+}
+
+/**
+ * Represents a request to update the "safe" fields of a Delivery Service - i.e.
+ * the ones that are modifiable through the `/deliveryservices/{{ID}}/safe`
+ * endpoint of the Traffic Ops API.
+ */
+export interface DSSafeUpdateRequest {
+	displayName: string;
+	infoUrl?: string | null;
+	longDesc?: string | null;
+	/** @deprecated This has been removed in the latest API version. */
+	longDesc1?: string | null;
+}
+
+/**
+ * Represents a request to associate zero or more servers with a Delivery
+ * Service.
+ *
+ * This is redundant with {@link RequestDeliveryServiceServer}, so
+ * applications are recommended to pick one API endpoint to use for such
+ * assignments, which will determine the representation used. Generally it boils
+ * down to whether you'd rather use hostnames (which can't be guaranteed to be
+ * unique to a server so they may be a bad choice!) and XMLIDs or numeric IDs to
+ * identify servers and Delivery Services.
+ */
+export interface RequestDeliveryServicesServers {
+	serverNames: Array<string>;
+}
+
+/**
+ * Represents a response from Traffic Ops to a request to associate zero or more
+ * servers with a Delivery Service.
+ *
+ * This is redundant with {@link ResponseDeliveryServiceServer}, so
+ * applications are recommended to pick one API endpoint to use for such
+ * assignments, which will determine the representation used. Generally it boils
+ * down to whether you'd rather use hostnames (which can't be guaranteed to be
+ * unique to a server so they may be a bad choice!) and XMLIDs or numeric IDs to
+ * identify servers and Delivery Services.
+ */
+export interface ResponseDeliveryServicesServers {
+	serverNames: Array<string>;
+	xmlId: string;
+}
+
+/**
+ * Represents a request to associate a Delivery Service with zero or more
+ * servers as Traffic Ops requires it in requests to its
+ * `/deliveryserviceserver` API endpoint.
+ *
+ * This is redundant with {@link RequestDeliveryServicesServers}, so
+ * applications are recommended to pick one API endpoint to use for such
+ * assignments, which will determine the representation used. Generally it boils
+ * down to whether you'd rather use hostnames (which can't be guaranteed to be
+ * unique to a server so they may be a bad choice!) and XMLIDs or numeric IDs to
+ * identify servers and Delivery Services.
+ */
+export interface RequestDeliveryServiceServer {
+	dsId: number;
+	/** @default false */
+	replace?: boolean | null;
+	/** @default [] */
+	servers?: Array<number> | null;
+}
+
+/**
+ * Represents a single association shown in responses to GET requests made to
+ * `/deliveryserviceserver` endpoint of the Traffic Ops API.
+ *
+ * This is redundant with {@link ResponseDeliveryServicesServers}, so
+ * applications are recommended to pick one API endpoint to use for such
+ * assignments, which will determine the representation used. Generally it boils
+ * down to whether you'd rather use hostnames (which can't be guaranteed to be
+ * unique to a server so they may be a bad choice!) and XMLIDs or numeric IDs to
+ * identify servers and Delivery Services.
+ */
+export interface ResponseDeliveryServiceServer {
+	deliveryService: number;
+	readonly lastUpdated: Date;
+	server: number;
+}
+
+/**
+ * Represents a Service Category as Traffic Ops requires it in requests.
+ */
+export interface RequestServiceCategory {
+	name: string;
+}
+
+/**
+ * Represents a Service Category as Traffic Ops presents it in responses.
+ */
+export interface ResponseServiceCategory {
+	readonly lastUpdated: Date;
+	name: string;
+}
+
+/**
+ * Service Categories are used to group Delivery Services for the purposes of
+ * metrics and analytics. Cache servers will add the value of a Delivery
+ * Service's Service Category as the `X-CDN-SVC` HTTP Header in their downstream
+ * responses.
+ */
+export type ServiceCategory = RequestServiceCategory | ResponseServiceCategory;
+
+/**
+ * Represents a Static DNS Entry as Traffic Ops requires it in requests.
+ */
+export interface RequestStaticDNSEntry {
+	address: string;
+	/** @default null */
+	cachegroupId?: number | null;
+	deliveryserviceId: number;
+	host: string;
+	/** In seconds */
+	ttl: number;
+	typeId: number;
+}
+
+/**
+ * A response to a {@link RequestStaticDNSEntry}.
+ */
+export interface RequestStaticDNSEntryResponse {
+	address: string;
+	cachegroupId: number | null;
+	cachegroup: string | null;
+	deliveryserviceId: number;
+	deliveryservice: string | null;
+	host: string;
+	readonly id: number;
+	readonly lastUpdated: Date;
+	/** In seconds */
+	ttl: number;
+	type: string;
+	typeId: number;
+}
+
+/**
+ * All of the properties common to Static DNS Entries as presented in responses.
+ */
+interface ResponseStaticDNSEntryBase {
+	address: string;
+	deliveryserviceId: number;
+	deliveryservice: string;
+	host: string;
+	readonly id: number;
+	readonly lastUpdated: Date;
+	/** In seconds */
+	ttl: number;
+	type: string;
+	typeId: number;
+}
+
+/**
+ * Represents a Static DNS Entry with an associated Cache Group as Traffic Ops
+ * presents it in responses.
+ */
+interface ResponseStaticDNSEntryWithCacheGroup extends ResponseStaticDNSEntryBase {
+	cachegroupId: number;
+	cachegroup: string;
+}
+
+/**
+ * Represents a Static DNS Entry without an associated Cache Group as Traffic
+ * Ops presents it in responses.
+ */
+interface ResponseStaticDNSEntryWithoutCacheGroup extends ResponseStaticDNSEntryBase {
+	cachegroupId: null;
+	cachegroup: null;
+}
+
+/**
+ * Represents a Static DNS Entry as Traffic Ops presents it in responses.
+ */
+export type ResponseStaticDNSEntry = ResponseStaticDNSEntryWithCacheGroup | ResponseStaticDNSEntryWithoutCacheGroup;
+
+/**
+ * A Static DNS Entry represents a custom DNS record for a Delivery Service.
+ */
+export type StaticDNSEntry = RequestStaticDNSEntry | RequestStaticDNSEntryResponse | ResponseStaticDNSEntry;

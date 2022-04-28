@@ -2,6 +2,8 @@
  * This file is for modeling and functionality related to Server objects
  */
 
+import type { Alert } from "./alert";
+
 /** IPAddress is a single IP address of a single network interface of a server. */
 export interface IPAddress {
 	/** The actual IP address. */
@@ -90,8 +92,7 @@ function inexhaustiveServiceAddresses(ips: Array<IPAddress>): [IPAddress | null,
  * Extracts the "service" address of an {@link IPAddress} collection or
  * {@link Interface}.
  *
- * @param inf The interface or raw list of IP addresses from which to extract
- * service addresses.
+ * @param infs The interfaces from which to extract service addresses.
  * @param exhaustive If `true`, the function will check for service addresses
  * exhaustively. When this is `false`, the function returns as soon as it finds
  * one service address per address family - essentially assuming that there are
@@ -106,8 +107,8 @@ function inexhaustiveServiceAddresses(ips: Array<IPAddress>): [IPAddress | null,
  * @throws {Error} When more than one service address is found for a single
  * address family.
  */
-export function serviceAddresses(inf: Interface | Array<IPAddress>, exhaustive = false): [ipv4Address: IPAddress | null, ipv6Address: IPAddress | null] {
-	const arr = inf instanceof Array ? inf : inf.ipAddresses;
+export function serviceAddresses(infs: Array<Interface>, exhaustive = false): [ipv4Address: IPAddress | null, ipv6Address: IPAddress | null] {
+	const arr = infs.map(inf=>inf.ipAddresses).flat();
 	if (exhaustive) {
 		return exhaustiveServiceAddresses(arr);
 	}
@@ -169,7 +170,7 @@ export interface ResponseServer {
 	/** The Server's network interfaces. */
 	interfaces: Array<Interface>;
 	/** The date/time at which the Server was last updated. */
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 	/** The IP address of the server's management interface. */
 	mgmtIpAddress: string | null;
 	/** The IP address of the gateway to the Server's management interface. */
@@ -298,4 +299,128 @@ export function checkMap(srv: Servercheck): Map<string, number | boolean> {
 		}
 	}
 	return ret;
+}
+
+/**
+ * A Servercheck Extension as Traffic Ops requires it in requests.
+ */
+export interface RequestServercheckExtension {
+	/* eslint-disable @typescript-eslint/naming-convention */
+	/** @default null */
+	additional_config_json?: string | null;
+	/** @default null */
+	description?: string | null;
+	info_url: string;
+	isactive: 0 | 1;
+	name: string;
+	servercheck_short_name: string;
+	script_file: string;
+	type: string;
+	version: string;
+	/* eslint-enable @typescript-eslint/naming-convention */
+}
+
+/**
+ * Traffic Ops's non-standard response to a {@link RequestServercheckExtension}.
+ */
+export interface RequestServercheckExtensionResponse {
+	alerts: Array<Alert>;
+	supplemental: {
+		readonly id: number;
+	};
+}
+
+/**
+ * Represents a Servercheck Extension as presented by Traffic Ops in responses.
+ */
+export interface ResponseServercheckExtension {
+	/* eslint-disable @typescript-eslint/naming-convention */
+	additional_config_json: string | null;
+	description: string | null;
+	info_url: string;
+	isactive: 0 | 1;
+	name: string;
+	servercheck_short_name: string;
+	script_file: string;
+	type: string;
+	version: string;
+	/* eslint-enable @typescript-eslint/naming-convention */
+}
+
+/**
+ * A Servercheck extension is a "check"-type extension to Traffic Ops that
+ * provides servercheck data for later retrieval through the `/servercheck`
+ * endpoint.
+ */
+export type ServercheckExtension = RequestServercheckExtension | ResponseServercheckExtension;
+
+/**
+ * @deprecated This gives no useful information that an {@link Server} doesn't,
+ * so there's no reason to use it.
+ */
+export interface ServerDetails  {
+	cachegroup: string;
+	cdnName: string;
+	deliveryservices?: [number, ...number[]];
+	domainName: string;
+	/** @deprecated this has no known purpose, and you shouldn't invent one. */
+	guid: string | null;
+	/**
+	 * @deprecated This field is legacy and cannot be populated, and should be
+	 * removed soon (if this whole type isn't).
+	 */
+	hardwareInfo: unknown;
+	hostName: string;
+	httpsPort: number | null;
+	readonly id: number;
+	iloIpAddress: string;
+	iloIpGateway: string;
+	iloIpNetmask: string;
+	iloPassword: string;
+	iloUsername: string;
+	interfaces: Array<Interface>;
+	mgmtIpAddress: string;
+	mgmtIpGateway: string;
+	mgmtIpNetmask: string;
+	offlineReason: string;
+	physLocation: string;
+	profile: string;
+	/** @deprecated This has been removed from the latest API version. */
+	profileDesc: string;
+	/** @deprecated this has no known purpose, and you shouldn't invent one. */
+	rack: string;
+	routerHostName: string;
+	routerPortName: string;
+	status: string;
+	tcpPort: number;
+	type: string;
+	xmppId: string;
+	xmppPasswd: string;
+}
+
+/**
+ * Represents the various statuses of a Server to give a complete view of its
+ * current state.
+ */
+export interface ServerUpdateStatus {
+	/* eslint-disable @typescript-eslint/naming-convention */
+	host_id: number;
+	host_name: string;
+	parent_pending: boolean;
+	parent_reval_pending: boolean;
+	reval_pending: boolean;
+	status: string;
+	upd_pending: boolean;
+	use_reval_pending: boolean;
+	/* eslint-enable @typescript-eslint/naming-convention */
+}
+
+/**
+ * Represents a response from Traffic Ops to a request to associate zero or more
+ * Delivery Services with a server.
+ */
+export interface ServerDeliveryServices {
+	dsIds: Array<number>;
+	serverId: number;
+	replace: boolean;
 }

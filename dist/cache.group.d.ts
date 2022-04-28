@@ -3,7 +3,7 @@ export interface ResponseASN {
     cachegroup: string;
     cachegroupId: number;
     readonly id: number;
-    lastUpdated: Date;
+    readonly lastUpdated: Date;
 }
 export interface RequestASN {
     asn: number;
@@ -32,7 +32,7 @@ interface ResponseCacheGroupBase {
     fallbacks: Array<string>;
     fallbackToClosest: boolean;
     readonly id: number;
-    lastUpdated: Date;
+    readonly lastUpdated: Date;
     latitude: number | null;
     localizationMethods: Array<LocalizationMethod>;
     longitude: number | null;
@@ -63,4 +63,23 @@ declare type ResponseCacheGroupWithSecondaryButNotParent = ResponseCacheGroupWit
 declare type ResponseCacheGroupWithoutParentOrSecondary = ResponseCacheGroupWithoutParent & ResponseCacheGroupWithoutSecondaryParent;
 export declare type ResponseCacheGroup = ResponseCacheGroupWithParentButNotSecondary | ResponseCacheGroupWithParentAndSecondary | ResponseCacheGroupWithSecondaryButNotParent | ResponseCacheGroupWithoutParentOrSecondary;
 export declare type CacheGroup = RequestCacheGroup | ResponseCacheGroup;
+export interface ResponseCacheGroupParameters {
+    cachegroupParameters: Array<{
+        parameter: number;
+        readonly lastUpdated: Date;
+        cachegroup: string;
+    }>;
+}
+export interface RequestCacheGroupParameter {
+    cacheGroupId: number;
+    parameterId: number;
+}
+export interface CacheGroupDeliveryServiceAssignmentRequest {
+    deliveryServices: Array<number>;
+}
+export interface CacheGroupDeliveryServiceAssignmentResponse {
+    deliveryServices: Array<number>;
+    readonly id: number;
+    serverNames: Array<string>;
+}
 export {};
