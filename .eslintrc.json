@@ -6,7 +6,9 @@
 	],
 	"parser": "@typescript-eslint/parser",
 	"parserOptions": {
-		"project": ["tsconfig.json"]
+		"project": [
+			"tsconfig.json"
+		]
 	},
 	"plugins": [
 		"@typescript-eslint",
@@ -52,7 +54,7 @@
 			{
 				"accessibility": "explicit",
 				"overrides": {
-					"constructors": "no-public"
+					"constructors": "off"
 				}
 			}
 		],
@@ -160,6 +162,8 @@
 			"error"
 		],
 		"@typescript-eslint/typedef": "off",
+		"jsdoc/no-types": "error",
+		"jsdoc/require-description": "error",
 		"jsdoc/require-jsdoc": [
 			"error",
 			{
@@ -192,7 +196,35 @@
 			"1tbs"
 		],
 		"class-methods-use-this": "off",
-		"import/order": "error",
+		"import/export": "error",
+		"import/first": "error",
+		"import/newline-after-import": "error",
+		"import/no-cycle": "error",
+		"import/no-self-import": "error",
+		"import/no-useless-path-segments": [
+			"error",
+			{
+				"commonjs": true,
+				"noUselessIndex": true
+			}
+		],
+		"import/order": [
+			"error",
+			{
+				"alphabetize": {
+					"order": "asc"
+				},
+				"groups": [
+					"builtin",
+					"external",
+					"internal",
+					"parent",
+					"sibling"
+				],
+				"newlines-between": "always",
+				"warnOnUnassignedImports": true
+			}
+		],
 		"linebreak-style": [
 			"error",
 			"unix"
@@ -207,6 +239,14 @@
 			"error",
 			{
 				"capIsConstructor": false
+			}
+		],
+		"no-multiple-empty-lines": [
+			"error",
+			{
+				"max": 1,
+				"maxBOF": 0,
+				"maxEOF": 0
 			}
 		],
 		"no-new-func": "error",
