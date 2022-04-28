@@ -80,7 +80,7 @@ interface ResponseUser {
 	 * [the Traffic Ops API documentation](https://traffic-control-cdn.readthedocs.io/en/latest/api/index.html#traffic-ops-s-custom-date-time-format)
 	 * for details.
 	 */
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 	newUser: boolean | null;
 	phoneNumber: string | null;
 	postalCode: string | null;
@@ -145,7 +145,7 @@ export interface ResponseCurrentUser {
 	 * [the Traffic Ops API documentation](https://traffic-control-cdn.readthedocs.io/en/latest/api/index.html#traffic-ops-s-custom-date-time-format)
 	 * for details.
 	 */
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 	localUser: boolean;
 	newUser: boolean;
 	phoneNumber: string | null;
@@ -159,6 +159,16 @@ export interface ResponseCurrentUser {
 	tenantId: number;
 	uid: number | null;
 	username: string;
+}
+
+/**
+ * Checks if a provided user email is valid.
+ *
+ * @param email The email to check.
+ * @returns `true` if `email` is valid, `false` otherwise.
+ */
+export function userEmailIsValid(email: string): email is `${string}@${string}.${string}` {
+	return /^.+@.+\..+$/.test(email);
 }
 
 /**
@@ -227,6 +237,86 @@ export interface RequestCurrentUser {
 /**
  * CurrentUser generically represents a "current user" representation in the
  * context of either a request or response. This differs from a "user" in a few
- * key ways as tracked by apache/trafficcontrol#6299.
+ * key ways as tracked by
+ * {@link https://github.com/apache/trafficcontrol/issues/6299 #6299}.
  */
 export type CurrentUser = ResponseCurrentUser | RequestCurrentUser;
+
+/**
+ * Represents a Role as Traffic Ops requires it in requests.
+ */
+export interface RequestRole {
+	capabilities: Array<string>;
+	description: string;
+	name: string;
+	privLevel: number;
+}
+
+/**
+ * Represents a Role as Traffic Ops presents it in responses.
+ */
+export interface ResponseRole extends RequestRole {
+	readonly id: number;
+}
+
+/**
+ * A Role encapsulates the permissions to perform operations through the Traffic
+ * Ops API.
+ */
+export type Role = RequestRole | ResponseRole;
+
+/**
+ * Represents a Tenant as Traffic Ops requires it in requests.
+ */
+export interface RequestTenant {
+	active: boolean;
+	name: string;
+	parentId: number;
+}
+
+/**
+ * A response to a {@link RequestTenant}.
+ */
+export interface RequestTenantResponse extends RequestTenant {
+	readonly id: number;
+	readonly lastUpdated: Date;
+}
+
+/**
+ * Properties common to Tenants in (almost) all responses.
+ */
+interface ResponseTenantBase {
+	active: boolean;
+	readonly id: number;
+	readonly lastUpdated: Date;
+	name: string;
+}
+
+/**
+ * The root Tenant - it's the only one allowed to have a `null` `parentId`.
+ */
+interface ResponseRootTenant extends ResponseTenantBase {
+	active: true;
+	name: "root";
+	parentId: null;
+}
+
+/**
+ * A regular Tenant - its `parentId` must not be `null`.
+ */
+interface ResponseRegularTenant extends ResponseTenantBase {
+	// I know this doesn't work, but I'm doing it anyway.
+	name: Exclude<string, "root">;
+	parentId: number;
+}
+
+/**
+ * Represents a Tenant as Traffic Ops presents it in responses.
+ */
+export type ResponseTenant = ResponseRootTenant | ResponseRegularTenant;
+
+/**
+ * A Tenant is a grouping of users to manage a shared set of CDN configuration,
+ * most frequently one or more Delivery Services.
+ */
+export type Tenant = ResponseTenant | RequestTenant | RequestTenantResponse;

@@ -10,7 +10,7 @@ export interface RequestDivision {
  */
 export interface ResponseDivision {
 	readonly id: number;
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 	name: string;
 }
 
@@ -32,7 +32,7 @@ export interface ResponseRegion {
 	division: number;
 	divisionName: string;
 	readonly id: number;
-	lastUpdated: Date;
+	readonly lastUpdated: Date;
 	name: string;
 }
 

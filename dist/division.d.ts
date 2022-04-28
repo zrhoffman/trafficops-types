@@ -3,7 +3,7 @@ export interface RequestDivision {
 }
 export interface ResponseDivision {
     readonly id: number;
-    lastUpdated: Date;
+    readonly lastUpdated: Date;
     name: string;
 }
 export declare type Division = RequestDivision | ResponseDivision;
@@ -15,7 +15,7 @@ export interface ResponseRegion {
     division: number;
     divisionName: string;
     readonly id: number;
-    lastUpdated: Date;
+    readonly lastUpdated: Date;
     name: string;
 }
 export declare type Region = RequestRegion | ResponseRegion;

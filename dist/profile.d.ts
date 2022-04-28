@@ -17,8 +17,8 @@ export declare const enum ProfileType {
 }
 interface ResponseProfileParameter {
     configFile: string;
-    id: number;
-    lastUpdated: null;
+    readonly id: number;
+    readonly lastUpdated: null;
     name: string;
     profiles: null;
     secure: boolean;
@@ -29,7 +29,7 @@ export interface ResponseProfile {
     cdnName: string | null;
     description: string;
     id: number;
-    lastUpdated: Date;
+    readonly lastUpdated: Date;
     name: string;
     params?: [ResponseProfileParameter, ...ResponseProfileParameter[]];
     routingDisabled: boolean;
@@ -43,4 +43,82 @@ export interface RequestProfile {
     type: ProfileType;
 }
 export declare type Profile = RequestProfile | ResponseProfile;
+export interface RequestParameter {
+    configFile: string;
+    name: string;
+    secure: boolean;
+    value?: string | null;
+}
+export interface ResponseParameter {
+    configFile: string;
+    readonly id: number;
+    readonly lastUpdated: Date;
+    name: string;
+    profiles: Array<string> | null;
+    secure: boolean;
+    value: string;
+}
+export declare type Parameter = RequestParameter | ResponseParameter;
+export interface RequestParameterProfile {
+    paramId: number;
+    profileIds: Array<number>;
+    replace?: boolean | null;
+}
+export interface RequestParameterProfileResponse {
+    paramId: number;
+    profileIds: Array<number>;
+    replace: boolean;
+}
+export declare type ParameterProfile = RequestParameterProfile | RequestParameterProfileResponse;
+export interface RequestProfileParameter {
+    profileId: number;
+    paramIds: Array<number>;
+    replace?: boolean | null;
+}
+export interface RequestProfileParameterResponse {
+    profileId: number;
+    paramIds: Array<number>;
+    replace: boolean;
+}
+export declare type ProfileParameter = RequestProfileParameter | RequestProfileParameterResponse;
+export interface RequestProfileParameters {
+    parameterId: number;
+    profileId: number;
+}
+export interface RequestProfileParametersResponse {
+    readonly lastUpdated: null;
+    parameter: string | null;
+    parameterId: number;
+    profileId: number;
+    profile: string | null;
+}
+export interface ResponseProfileParameters {
+    readonly lastUpdated: Date;
+    profile: string;
+    parameter: number;
+}
+export declare type ProfileParameters = RequestProfileParameters | RequestProfileParametersResponse | ResponseProfileParameters;
+export interface ProfileImport {
+    profile: {
+        cdn: string;
+        description: string;
+        name: string;
+        type: ProfileType;
+    };
+    parameters: Array<{
+        config_file: string;
+        name: string;
+        value: string;
+    }>;
+}
+export interface ProfileExport extends ProfileImport {
+    alerts: null;
+}
+export interface ProfileCopyResponse {
+    description: string;
+    idCopyFrom: number;
+    id: number;
+    name: string;
+    profileCopyFrom: string;
+}
 export {};

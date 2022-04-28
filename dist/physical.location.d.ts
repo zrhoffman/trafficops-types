@@ -4,7 +4,7 @@ export interface ResponsePhysicalLocation {
     comments: string | null;
     email: string | null;
     id: number;
-    lastUpdated: Date;
+    readonly lastUpdated: Date;
     name: string;
     phone: string | null;
     poc: string | null;

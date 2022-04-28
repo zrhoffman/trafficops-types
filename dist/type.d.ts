@@ -1,7 +1,7 @@
 export interface TypeFromResponse {
     description: string;
-    id: number;
-    lastUpdated: Date;
+    readonly id: number;
+    readonly lastUpdated: Date;
     name: string;
     useInTable: string;
 }

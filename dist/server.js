@@ -43,8 +43,8 @@ function inexhaustiveServiceAddresses(ips) {
     }
     return [ipv4, ipv6];
 }
-export function serviceAddresses(inf, exhaustive = false) {
-    const arr = inf instanceof Array ? inf : inf.ipAddresses;
+export function serviceAddresses(infs, exhaustive = false) {
+    const arr = infs.map(inf => inf.ipAddresses).flat();
     if (exhaustive) {
         return exhaustiveServiceAddresses(arr);
     }

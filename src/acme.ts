@@ -8,3 +8,11 @@ export interface ACMEAccount {
 	provider: string;
 	uri: string;
 }
+
+/**
+ * Represents a single DNS record used for completing ACME challenges.
+ */
+export interface ACMEDNSRecord {
+	fqdn: string;
+	record: string;
+}
