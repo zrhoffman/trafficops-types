@@ -16,41 +16,41 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { Alert } from "./alert";
+import type { Alert } from "./alert.js";
 
-export * from "./about";
-export * from "./acme";
-export * from "./alert";
-export * from "./cache.group";
-export * from "./capability";
-export * from "./cdn";
-export * from "./coordinate";
-export * from "./delivery.service.request";
-export * from "./delivery.service";
-export * from "./division";
-export * from "./dnssec";
-export * from "./federation";
-export * from "./invalidation";
-export * from "./iso";
-export * from "./login";
-export * from "./logs";
-export * from "./origin";
-export * from "./physical.location";
-export * from "./plugin";
-export * from "./profile";
-export * from "./router";
-export * from "./server.capability";
-export * from "./server";
-export * from "./snap.and.queue";
-export * from "./ssl";
-export * from "./stats";
-export * from "./status";
-export * from "./steering";
-export * from "./topology";
-export * from "./type";
-export * from "./uri.signing";
-export * from "./user";
-export * from "./vault";
+export * from "./about.js";
+export * from "./acme.js";
+export * from "./alert.js";
+export * from "./cache.group.js";
+export * from "./capability.js";
+export * from "./cdn.js";
+export * from "./coordinate.js";
+export * from "./delivery.service.request.js";
+export * from "./delivery.service.js";
+export * from "./division.js";
+export * from "./dnssec.js";
+export * from "./federation.js";
+export * from "./invalidation.js";
+export * from "./iso.js";
+export * from "./login.js";
+export * from "./logs.js";
+export * from "./origin.js";
+export * from "./physical.location.js";
+export * from "./plugin.js";
+export * from "./profile.js";
+export * from "./router.js";
+export * from "./server.capability.js";
+export * from "./server.js";
+export * from "./snap.and.queue.js";
+export * from "./ssl.js";
+export * from "./stats.js";
+export * from "./status.js";
+export * from "./steering.js";
+export * from "./topology.js";
+export * from "./type.js";
+export * from "./uri.signing.js";
+export * from "./user.js";
+export * from "./vault.js";
 
 /**
  * Represents a version of the Traffic Ops API for which this library was made.
