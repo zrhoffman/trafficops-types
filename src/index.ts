@@ -88,7 +88,7 @@ export const VERSION: VersionType = {
 /**
  * (Nearly) All responses from the Traffic Ops API conform to this interface.
  */
-export interface APISuccessResponse<T> {
+export interface APIResponse<T> {
 	/** Any and all Alerts that may accompany the response. */
 	alerts?: Array<Alert>;
 	/** The actual response object. */
