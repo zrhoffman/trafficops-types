@@ -32,6 +32,15 @@ export interface CDNDNSSECKeyGenerationRequest {
 	zskExpirationDays: number;
 }
 
+/**
+ * Represents a request to generate a Key-Signing-Key (for DNSSEC) for a CDN.
+ */
+export interface CDNKSKGenerationRequest {
+	/** @default Date.now() */
+	effectiveDate?: Date | null;
+	expirationDays: number;
+}
+
 /** CDNDNSSECKeys represents the DNSSEC Keys for a single CDN. */
 export interface CDNDNSSECKeys {
 	ksk: {
