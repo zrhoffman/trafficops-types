@@ -262,6 +262,96 @@ export interface ResponseServer {
 	xmppPasswd?: string | null;
 }
 
+export interface RequestServer {
+	/**
+	 * The integral, unique identifier of the Cache Group to which the server
+	 * belongs.
+	 */
+	cachegroupId: number;
+	/**
+	 * The integral, unique identifier of the CDN to which the server belongs.
+	 */
+	cdnId: number;
+	 /**
+	 * The servers FQDN without its hostname - e.g. 'apache.org' from
+	 * 'trafficcontrol.apache.org'.
+	 */
+	domainName: string;
+	/**
+	 * Legacy field with no purpose.
+	 *
+	 * @deprecated This field has no purpose and is subject to removal in the
+	 * future.
+	 */
+	guid?: number | null;
+	/**
+	 * The server's hostname, e.g. 'trafficcontrol' from
+	 * 'trafficcontrol.apache.org'.
+	 */
+	hostName: string;
+	/** The port used to serve HTTPS responses, if any. */
+	httpsPort?: number | null;
+	/** The IP address of the Server's ILO interface. */
+	iloIpAddress?: string | null;
+	/** The IP address of the gateway to the Server's ILO interface. */
+	iloIpGateway?: string | null;
+	/**
+	 * A netmask that describes the subnet allocated to the Server's ILO
+	 * interface.
+	 */
+	iloIpNetmask?: string | null;
+	/** The Server's ILO interface's password. */
+	iloPassword?: string | null;
+	/** The Server's ILO interface's root user's name. */
+	iloUsername?: string | null;
+	/** The Server's network interfaces. */
+	interfaces: [Interface, ...Interface[]];
+	/** The IP address of the server's management interface. */
+	mgmtIpAddress?: string | null;
+	/** The IP address of the gateway to the Server's management interface. */
+	mgmtIpGateway?: string | null;
+	/**
+	 * The netmask that describes the subnet allocated to the Server's
+	 * management interface.
+	 */
+	mgmtIpNetmask?: string | null;
+	/** The reason the Server has been taken out of service. */
+	offlineReason?: string | null;
+	/**
+	 * An integral, unique identifier for the physical location in which the
+	 * Server resides.
+	 */
+	physLocationId: number;
+	/**
+	 * An integral, unique identifier for the Profile used by the Server.
+	 *
+	 * @deprecated In the latest API version, a server's Profile is identified
+	 * only by name, not unique, integral identifier.
+	 */
+	profileId: number;
+	/**
+	 * Legacy field with no purpose.
+	 *
+	 * @deprecated This field has no purpose and is subject to removal in the
+	 * future.
+	 */
+	rack?: string | null;
+	/** The hostname of the router that routes to this Server. */
+	routerHostName?: string | null;
+	/** The... name... of the port... used by the Server's router?? */
+	routerPortName?: string | null;
+	/** An integral, unique, identifier for the Server's Status. */
+	statusId: number;
+	/** An integral, unique identifier for the Type of this Server. */
+	typeId: number;
+}
+
+/**
+ * Generically represents a Server in the context of either a request or a
+ * response.
+ */
+export type Server = RequestServer | ResponseServer;
+
 /**
  * Servercheck models the data returned by the /servercheck API endpoint.
  */
