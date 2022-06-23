@@ -111,7 +111,7 @@ interface ResponseUser {
 	 */
 	registrationSent?: null | Date;
 	role: number;
-	stateOrProvince: null;
+	stateOrProvince: string | null;
 	tenant: string;
 	tenantID?: never;
 	tenantId: number;
