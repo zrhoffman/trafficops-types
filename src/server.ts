@@ -262,6 +262,9 @@ export interface ResponseServer {
 	xmppPasswd?: string | null;
 }
 
+/**
+ * Represents a server of some kind in the context of a request to Traffic Ops.
+ */
 export interface RequestServer {
 	/**
 	 * The integral, unique identifier of the Cache Group to which the server
