@@ -91,6 +91,8 @@ export interface RequestPhysicalLocation {
 	 * Location lies.
 	 */
 	regionId: number;
+	/** An abbreviation of the name. */
+	shortName: string;
 	/**
 	 * An abbreviation (usually) of the name of the state or province within
 	 * which this Physical Location lies.
