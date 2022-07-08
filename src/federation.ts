@@ -52,7 +52,7 @@ export interface PostResponseCDNFederation {
  */
 export interface RequestCDNFederation {
 	cname: string;
-	description: string;
+	description?: string | null;
 	/** In hours. */
 	ttl: number;
 }
