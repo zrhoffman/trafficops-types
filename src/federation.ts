@@ -40,6 +40,7 @@ export interface ResponseCDNFederation {
 export interface PostResponseCDNFederation {
 	cname: string;
 	description: string;
+	readonly id: number;
 	readonly lastUpdated: Date;
 	/** In hours. */
 	ttl: number;
