@@ -157,6 +157,7 @@ export interface DeliveryServiceStatusChangeRequest {
  */
 export interface DeliveryServicesRequest {
 	details: {
+		contentType: string;
 		customer: string;
 		deepCachingType: "ALWAYS" | "NEVER";
 		deliveryProtocol: "http" | "https" | "http/https";
