@@ -80,8 +80,11 @@ interface PutRequestNotChangingPasswordUser {
  */
 export type PutRequestUser = PostRequestUser | PutRequestNotChangingPasswordUser;
 
+/** Generically represents a user in the context of a request. */
+export type RequestUser = PutRequestUser | PostRequestUser;
+
 /** Groups the fields common to responses from /users in all contexts. */
-interface ResponseUser {
+interface ResponseUserBase {
 	addressLine1: string | null;
 	addressLine2: string | null;
 	city: string | null;
@@ -121,7 +124,7 @@ interface ResponseUser {
 }
 
 /** Represents a response from /users to a PUT or POST request. */
-export interface PutOrPostResponseUser extends ResponseUser {
+export interface PutOrPostResponseUser extends ResponseUserBase {
 	/**
 	 * This appears only in response to POST requests, or to PUT requests where
 	 * the user's password was changed.
@@ -132,11 +135,14 @@ export interface PutOrPostResponseUser extends ResponseUser {
 }
 
 /** Represents a response from /users to a GET request. */
-export interface GetResponseUser extends ResponseUser {
+export interface GetResponseUser extends ResponseUserBase {
 	confirmLocalPasswd?: never;
 	rolename: string;
 	roleName?: never;
 }
+
+/** Generically represents a user in the context of a response. */
+export type ResponseUser = GetResponseUser | PutOrPostResponseUser;
 
 /**
  * User generically represents a user in the context of a PUT, POST, or GET
