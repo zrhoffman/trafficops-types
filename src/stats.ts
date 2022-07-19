@@ -16,11 +16,48 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-/** CacheStatsSeries is a set of data collected by Traffic Stats. */
-export interface CacheStatsSeries {
-	columns: ["time", "sum_count"];
+/**
+ * The types of metrics reported by Traffic Stats through the
+ * `/deliveryservice_stats` Traffic Ops API endpoint.
+ */
+export const enum DSStatsMetricType {
+	/**
+	 * The total traffic rate in kilobytes per second served by the Delivery
+	 * Service.
+	 */
+	KBPS = "kbps",
+	/**
+	 * The total traffic rate in transactions per second served by the Delivery
+	 * Service.
+	 */
+	TPS_TOTAL = "tps_total",
+	/**
+	 * The total traffic rate in transactions per second serviced with 200-299
+	 * HTTP status codes.
+	 */
+	TPS_2XX = "tps_2xx",
+	/**
+	 * The total traffic rate in transactions per second serviced with 300-399
+	 * HTTP status codes
+	 */
+	TPS_3XX = "tps_3xx",
+	/**
+	 * The total traffic rate in transactions per second serviced with 400-499
+	 * HTTP status codes
+	 */
+	TPS_4XX = "tps_4xx",
+	/**
+	 * The total traffic rate in transactions per second serviced with 500-599
+	 * HTTP status codes
+	 */
+	TPS_5XX = "tps_5xx",
+}
+
+/** Properties common to all stats series data. */
+interface StatsSeries {
+	columns: ["time", string];
 	count: number;
-	name: `${"bandwidth" | "connections" | "maxkbps"}.cdn.1min`;
+	name: string;
 	/**
 	 * Each first tuple element is actually a string that represents a
 	 * date/time, in a custom format. Refer to
@@ -30,7 +67,21 @@ export interface CacheStatsSeries {
 	values: Array<[Date, number | null]>;
 }
 
-/** CacheStatsSummary is a summary of some statistics set. */
+/**
+ * DSStatsSeries is a set of Delivery Service data collected by Traffic Stats.
+ */
+export interface DSStatsSeries extends StatsSeries {
+	columns: ["time", "mean"];
+	name: `${DSStatsMetricType}.ds.1min`;
+}
+
+/** CacheStatsSeries is a set of cache data collected by Traffic Stats. */
+export interface CacheStatsSeries extends StatsSeries {
+	columns: ["time", "sum_count"];
+	name: `${"bandwidth" | "connections" | "maxkbps"}.cdn.1min`;
+}
+
+/** CacheStatsSummary is a summary of some cache statistics set. */
 export interface CacheStatsSummary {
 	average: number;
 	count: number;
@@ -39,6 +90,20 @@ export interface CacheStatsSummary {
 	min: number;
 	ninetyEightPercentile: number;
 	ninetyFifthPercentile: number;
+}
+
+/** Represents a response from `/deliveryservice_stats` */
+export interface DSStats {
+	/**
+	 * This will be excluded if the 'exclude' query string parameter was
+	 * "series" **or** if there were no data points for the requested data set.
+	 */
+	series?: DSStatsSeries;
+	/**
+	 * This will be excluded **only** if the 'exclude' query string parameter
+	 * was "summary".
+	 */
+	summary?: CacheStatsSummary;
 }
 
 /** Represents a response from /cache_stats.*/
